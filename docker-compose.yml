@@ -1,0 +1,23 @@
+# Fest der Demokratie website — stack for Portainer.
+#
+# The image is built and pushed to GHCR by .github/workflows/docker.yml on every push to main.
+# No ports are published: Nginx Proxy Manager reaches the container over the shared
+# network. In NPM, create a proxy host forwarding to:
+#   scheme http, host fest-der-demokratie-webseite, port 80
+
+services:
+  web:
+    image: ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite:latest
+    container_name: fest-der-demokratie-webseite
+    restart: unless-stopped
+    networks:
+      - nginx-proxy-manager
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+networks:
+  nginx-proxy-manager:
+    external: true
