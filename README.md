@@ -41,9 +41,9 @@ docker run --rm -p 8080:80 fest-der-demokratie-webseite
 
 1. Every push to `main` runs `.github/workflows/docker.yml`, which builds the nginx image and pushes it to
    `ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite` with the tags `latest` and an increasing version (`v1`, `v2`, …; a matching git tag is created).
-2. The server runs `docker-compose.yml` as a Portainer stack. The container joins the external Docker network `nginx-proxy-manager` and publishes no ports.
+2. The server runs `docker-compose.yml` as a Portainer stack. It pins a fixed image version (e.g. `:24`), never `:latest`. The container joins the external Docker network `nginx-proxy-manager` and publishes no ports.
 3. In Nginx Proxy Manager, the proxy host forwards to `http://fest-der-demokratie-webseite:80`.
-4. To update, redeploy the stack in Portainer with "Re-pull image" enabled.
+4. To update, set the image tag in `docker-compose.yml` to the new version (the newest `vN` git tag) and redeploy the stack in Portainer.
 
 If the GHCR package is private, add `ghcr.io` as a registry in Portainer with a token that has `read:packages`.
 
