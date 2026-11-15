@@ -362,6 +362,8 @@ button {
 .hero__center {
   flex: 1;
   display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
   align-items: center;
   justify-content: center;
   padding-top: var(--nav-height);
@@ -377,33 +379,43 @@ button {
 }
 
 .hero__title-logo {
-  width: min(85%, 600px);
+  width: min(70%, 440px);
   height: auto;
   filter: drop-shadow(0 4px 24px rgba(0, 0, 0, 0.3));
   display: block;
   margin: 0 auto;
 }
 
-/* "by Open Project e.V." badge */
-.hero__badge {
+/* Save the Date under the hero logo */
+.hero__std {
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 2px;
-}
-
-.hero__badge-by {
-  font-size: 0.75rem;
-  font-weight: 400;
+  gap: 0.25rem;
   color: var(--white);
-  opacity: 0.8;
-  letter-spacing: 0.05em;
+  text-align: center;
+  text-shadow: 0 2px 16px rgba(0, 0, 0, 0.45);
 }
 
-.hero__badge-logo {
-  height: 36px;
-  width: auto;
-  opacity: 0.9;
+.hero__std-label {
+  font-family: var(--font-display);
+  font-size: clamp(1.125rem, 2.6vw, 1.875rem);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sunshine);
+}
+
+.hero__std-date {
+  font-family: var(--font-display);
+  font-size: clamp(2.75rem, 11vw, 9rem);
+  line-height: 0.95;
+  white-space: nowrap;
+}
+
+.hero__std-place {
+  font-size: clamp(1.125rem, 2.4vw, 1.75rem);
+  font-weight: 600;
+  letter-spacing: 0.02em;
 }
 
 /* Info bar at bottom */
@@ -2574,10 +2586,6 @@ a.problem-card__source:hover {
   animation: heroFadeIn 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.3s both;
 }
 
-.hero__badge {
-  animation: heroFadeIn 1s cubic-bezier(0.16, 1, 0.3, 1) 0.8s both;
-}
-
 .hero__infobar {
   animation: heroSlideUp 0.8s cubic-bezier(0.16, 1, 0.3, 1) 0.6s both;
 }
@@ -2772,10 +2780,6 @@ html {
   .hero__infobar-right .btn {
     width: 100%;
     justify-content: center;
-  }
-
-  .hero__badge {
-    order: -1;
   }
 
   .stats {
