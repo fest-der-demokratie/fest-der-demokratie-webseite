@@ -41,9 +41,9 @@ docker run --rm -p 8080:80 fest-der-demokratie-webseite
 
 1. Every push to `main` runs `.github/workflows/docker.yml`, which builds the nginx image and pushes it to
    `ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite` with the tags `latest` and an increasing version number (`23`, `24`, …); a matching git tag (`v23`, `v24`, …) is created.
-2. The server runs `docker-compose.yml` as a Portainer stack. It pins a fixed image version (e.g. `:24`), never `:latest`. The container joins the external Docker network `nginx-proxy-manager` and publishes no ports.
+2. The server runs `docker-compose.yml` from this repo as a git-based Portainer stack. It pins a fixed image version (e.g. `:24`), never `:latest`. The container joins the external Docker network `nginx-proxy-manager` and publishes no ports.
 3. In Nginx Proxy Manager, the proxy host forwards to `http://fest-der-demokratie-webseite:80`.
-4. To update, set the image tag in `docker-compose.yml` to the new version (the newest `vN` git tag) and redeploy the stack in Portainer.
+4. Deployment is automatic: after pushing the image, the workflow commits the new tag into `docker-compose.yml` (`deploy vN [skip ci]`) and POSTs to the Portainer stack webhook (secret `PORTAINER_WEBHOOK_URL`). Portainer then pulls the repo and redeploys. To roll back, set an older tag in `docker-compose.yml` and push.
 
 If the GHCR package is private, add `ghcr.io` as a registry in Portainer with a token that has `read:packages`.
 

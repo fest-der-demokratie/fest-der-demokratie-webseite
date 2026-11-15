@@ -31,8 +31,10 @@ Website of the Fest der Demokratie (Pfaffenhofen a.d. Ilm). See `README.md` for 
 ## Build & deploy
 
 - `.github/workflows/docker.yml` builds on every push to `main` and pushes `ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite:<N>` and `:latest`, then pushes git tag `v<N>` (N = highest existing `v*` tag + 1).
-- Known race: two pushes in quick succession both pick the same N; the second run overwrites image `:N` and then fails on the tag push. Fix not yet applied (serialize with a `concurrency` group, push the tag before the image).
-- Production (`docker-compose.yml`, deployed as a Portainer stack) pins a numbered image tag, never `:latest`. To release: bump the tag there and redeploy. The container joins the external network `nginx-proxy-manager` and publishes no ports.
+- Runs on `main` are serialized (`concurrency`), and the git tag is pushed before the image, so a version number can't be used twice.
+- Production is Portainer stack `fest-der-demokratie-webseite` (git-based, reads `docker-compose.yml` from `main`, polls every 5 min, re-pulls images). It pins a numbered image tag, never `:latest`. The container joins the external network `nginx-proxy-manager` and publishes no ports.
+- After each build the workflow commits the new tag into `docker-compose.yml` (`deploy vN [skip ci]`, by github-actions[bot]) and calls the Portainer webhook. So `main` gets a bot commit after every push: pull before working.
+- Portainer stack webhook (verified against Portainer 2.45.3 source, `api/http/handler/stacks/webhook_invoke.go`): **`POST` only, no body, no query parameters** (env vars can't be passed). It answers `204` immediately and redeploys asynchronously; errors only show in Portainer's logs. It redeploys **only if the git commit changed** (`ForceUpdate` is off), so calling it without a new commit does nothing. `409` = deployment already running, or the stack's author user is missing. The URL is the repo secret `PORTAINER_WEBHOOK_URL`; never print or commit it.
 - Base image is pinned to a minor version (`nginx:1.31-alpine`); Dependabot (`.github/dependabot.yml`) bumps it and the GitHub Actions weekly.
 - The local `gh` token lacks `read:packages`, so GHCR package visibility can't be checked from here.
 

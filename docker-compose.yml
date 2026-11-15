@@ -1,8 +1,9 @@
 # Fest der Demokratie website — stack for Portainer.
 #
 # The image is built and pushed to GHCR by .github/workflows/docker.yml on every push to main,
-# tagged with an increasing version number (matching git tag vN). Deploy a fixed version, not
-# :latest — to update, bump the tag below and redeploy the stack.
+# tagged with an increasing version number (matching git tag vN). Production runs a fixed
+# version, never :latest. The workflow rewrites the tag below after each build, commits it
+# and calls the Portainer webhook, which redeploys this stack from git.
 # No ports are published: Nginx Proxy Manager reaches the container over the shared
 # network. In NPM, create a proxy host forwarding to:
 #   scheme http, host fest-der-demokratie-webseite, port 80
