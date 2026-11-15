@@ -10,7 +10,7 @@
 
 services:
   web:
-    image: ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite:24
+    image: ghcr.io/fest-der-demokratie/fest-der-demokratie-webseite:27
     container_name: fest-der-demokratie-webseite
     restart: unless-stopped
     networks:
