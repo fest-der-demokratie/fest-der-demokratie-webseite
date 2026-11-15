@@ -402,7 +402,12 @@ button {
   font-size: clamp(1.125rem, 2.6vw, 1.875rem);
   text-transform: uppercase;
   letter-spacing: 0.08em;
-  color: var(--sunshine);
+  color: var(--white);
+  background: var(--ruby);
+  padding: 0.3em 0.7em 0.25em;
+  border-radius: 2px;
+  text-shadow: none;
+  margin-bottom: 0.35em;
 }
 
 .hero__std-date {
